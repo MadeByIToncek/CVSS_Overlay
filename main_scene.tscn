@@ -25,13 +25,19 @@ offset_top = 1.0
 offset_right = 1922.0
 offset_bottom = 145.0
 
-[node name="TimerBox" type="Control" parent="."]
+[node name="TimerBox" type="Control" parent="." node_paths=PackedStringArray("TimerBox", "T1Box", "T2Box", "TimerLabel", "T1Label", "T2Label")]
 anchors_preset = 0
 offset_left = 1720.0
-offset_top = 59.0
+offset_top = -143.0
 offset_right = 2120.0
-offset_bottom = 192.0
+offset_bottom = -10.0
 script = ExtResource("2_2c62f")
+TimerBox = NodePath(".")
+T1Box = NodePath("t1_scorebox")
+T2Box = NodePath("t2_scorebox")
+TimerLabel = NodePath("timer")
+T1Label = NodePath("t1_scorebox/t1_score")
+T2Label = NodePath("t2_scorebox/t2_score")
 
 [node name="t1_scorebox" type="ColorRect" parent="TimerBox"]
 layout_mode = 0
