@@ -1,0 +1,77 @@
+[gd_scene load_steps=5 format=3 uid="uid://b371w2d3ohhy1"]
+
+[ext_resource type="FontFile" uid="uid://ynpceox8l3v" path="res://fonts/regular.ttf" id="1_0f027"]
+[ext_resource type="Script" uid="uid://cpu3kgmxwd3gt" path="res://TimerController.cs" id="2_2c62f"]
+
+[sub_resource type="Theme" id="Theme_2c62f"]
+default_font = ExtResource("1_0f027")
+default_font_size = 100
+
+[sub_resource type="LabelSettings" id="LabelSettings_0f027"]
+font = ExtResource("1_0f027")
+font_size = 100
+font_color = Color(0, 0, 0, 1)
+
+[node name="MainScene" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+theme = SubResource("Theme_2c62f")
+
+[node name="MidscreenMarker" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 1920.0
+offset_top = 1.0
+offset_right = 1922.0
+offset_bottom = 145.0
+
+[node name="TimerBox" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 1720.0
+offset_top = 59.0
+offset_right = 2120.0
+offset_bottom = 192.0
+script = ExtResource("2_2c62f")
+
+[node name="t1_scorebox" type="ColorRect" parent="TimerBox"]
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 133.0
+color = Color(1, 0, 0, 1)
+
+[node name="t1_score" type="Label" parent="TimerBox/t1_scorebox"]
+layout_mode = 0
+offset_left = 40.0
+offset_right = 160.0
+offset_bottom = 133.0
+text = "99"
+horizontal_alignment = 2
+
+[node name="t2_scorebox" type="ColorRect" parent="TimerBox"]
+layout_mode = 0
+offset_left = 200.0
+offset_right = 400.0
+offset_bottom = 133.0
+color = Color(0, 0.2, 1, 1)
+
+[node name="t2_score" type="Label" parent="TimerBox/t2_scorebox"]
+layout_mode = 0
+offset_left = 40.0
+offset_right = 160.0
+offset_bottom = 133.333
+text = "99"
+horizontal_alignment = 2
+
+[node name="ColorRect" type="ColorRect" parent="TimerBox"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 133.0
+
+[node name="timer" type="Label" parent="TimerBox"]
+layout_mode = 1
+offset_left = 50.0
+offset_right = 350.0
+offset_bottom = 133.333
+text = "01:00"
+label_settings = SubResource("LabelSettings_0f027")
+horizontal_alignment = 1
