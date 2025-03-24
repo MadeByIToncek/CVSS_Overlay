@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NarrowCaster", "NarrowCaster.csproj", "{990A8F10-9B45-4E08-A89E-AF15CD09CE37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVSS_Overlay", "CVSS_Overlay.csproj", "{990A8F10-9B45-4E08-A89E-AF15CD09CE37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

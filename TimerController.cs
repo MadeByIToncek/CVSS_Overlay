@@ -1,6 +1,6 @@
 using Godot;
 
-namespace NarrowCaster;
+namespace CVSS_Overlay;
 
 public partial class TimerController : Control {
     [Export] public Control TimerBox;

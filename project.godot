@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="NarrowCaster"
+config/name="CVSS_Overlay"
 config/description="App designed as a broadcast overlay"
 config/version="0.0.0.1"
 run/main_scene="uid://b371w2d3ohhy1"
