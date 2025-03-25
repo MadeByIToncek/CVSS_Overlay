@@ -32,7 +32,7 @@ window/vsync/vsync_mode=2
 
 [dotnet]
 
-project/assembly_name="NarrowCaster"
+project/assembly_name="CVSS_Overlay"
 
 [rendering]
 
