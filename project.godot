@@ -19,15 +19,16 @@ run/max_fps=50
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="uid://csbh4i0v17jno"
 config/icon="uid://dgxy1gju075ve"
-boot_splash/minimum_display_time=5000
+boot_splash/minimum_display_time=2000
 
 [display]
 
 window/size/viewport_width=3840
 window/size/viewport_height=2160
 window/size/mode=4
-window/size/initial_position_type=2
+window/size/initial_position_type=3
 window/size/initial_screen=2
+window/stretch/mode="viewport"
 window/vsync/vsync_mode=2
 
 [dotnet]
@@ -36,6 +37,4 @@ project/assembly_name="CVSS_Overlay"
 
 [rendering]
 
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)

@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://b371w2d3ohhy1"]
+[gd_scene load_steps=8 format=3 uid="uid://b371w2d3ohhy1"]
 
 [ext_resource type="FontFile" uid="uid://ynpceox8l3v" path="res://fonts/regular.ttf" id="1_0f027"]
 [ext_resource type="Script" uid="uid://cpu3kgmxwd3gt" path="res://TimerController.cs" id="2_2c62f"]
+[ext_resource type="Script" uid="uid://cydnmfg412j8s" path="res://MainController.cs" id="2_gyfs4"]
 
 [sub_resource type="Theme" id="Theme_2c62f"]
 default_font = ExtResource("1_0f027")
@@ -23,6 +24,7 @@ font_size = 85
 layout_mode = 3
 anchors_preset = 0
 theme = SubResource("Theme_2c62f")
+script = ExtResource("2_gyfs4")
 
 [node name="MidscreenMarker" type="ColorRect" parent="."]
 visible = false
@@ -32,19 +34,14 @@ offset_top = 1.0
 offset_right = 1922.0
 offset_bottom = 145.0
 
-[node name="TimerBox" type="Control" parent="." node_paths=PackedStringArray("TimerBox", "T1Box", "T2Box", "TimerLabel", "T1Label", "T2Label")]
+[node name="TimerBox" type="Control" parent="."]
+visible = false
 anchors_preset = 0
 offset_left = 1720.0
-offset_top = 59.0
+offset_top = 60.0
 offset_right = 2120.0
-offset_bottom = 192.0
+offset_bottom = 193.0
 script = ExtResource("2_2c62f")
-TimerBox = NodePath(".")
-T1Box = NodePath("t1_scorebox")
-T2Box = NodePath("t2_scorebox")
-TimerLabel = NodePath("timer")
-T1Label = NodePath("t1_scorebox/t1_score")
-T2Label = NodePath("t2_scorebox/t2_score")
 
 [node name="t1_scorebox" type="ColorRect" parent="TimerBox"]
 layout_mode = 0
@@ -56,7 +53,7 @@ color = Color(1, 0, 0, 1)
 layout_mode = 0
 offset_left = 40.0
 offset_right = 160.0
-offset_bottom = 133.0
+offset_bottom = 133.333
 text = "01"
 horizontal_alignment = 2
 
@@ -75,7 +72,7 @@ offset_bottom = 133.333
 text = "99"
 horizontal_alignment = 2
 
-[node name="ColorRect" type="ColorRect" parent="TimerBox"]
+[node name="bg" type="ColorRect" parent="TimerBox"]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 133.0
@@ -91,37 +88,38 @@ label_settings = SubResource("LabelSettings_0f027")
 horizontal_alignment = 1
 
 [node name="LeftTeam" type="Control" parent="."]
+visible = false
 anchors_preset = 0
-offset_left = 52.0
-offset_top = 1409.0
-offset_right = 92.0
-offset_bottom = 1449.0
+offset_left = 80.0
+offset_top = 2060.0
+offset_right = 120.0
+offset_bottom = 2100.0
 
 [node name="label_bg" type="ColorRect" parent="LeftTeam"]
 layout_mode = 0
-offset_top = 13.0
+offset_top = -660.0
 offset_right = 747.0
-offset_bottom = 259.0
+offset_bottom = -410.0
 color = Color(0.0481, 0.37, 0.11248, 1)
 
 [node name="label_text" type="Label" parent="LeftTeam/label_bg"]
 layout_mode = 0
-offset_left = 48.0
+offset_left = 50.0
 offset_top = 25.0
-offset_right = 678.0
+offset_right = 680.0
 offset_bottom = 223.0
 text = "Filmáci"
 label_settings = SubResource("LabelSettings_2c62f")
 
 [node name="Name1" type="ColorRect" parent="LeftTeam"]
 layout_mode = 0
-offset_left = 1.0
-offset_top = 282.0
-offset_right = 795.0
-offset_bottom = 407.0
+offset_top = -395.0
+offset_right = 794.0
+offset_bottom = -270.0
 color = Color(0.0240611, 0.217654, 0.061116, 1)
 
 [node name="label_text" type="Label" parent="LeftTeam/Name1"]
+layout_mode = 0
 offset_left = 13.0
 offset_top = 8.0
 offset_right = 778.0
@@ -131,29 +129,28 @@ label_settings = SubResource("LabelSettings_gyfs4")
 
 [node name="Name2" type="ColorRect" parent="LeftTeam"]
 layout_mode = 0
-offset_left = 1.0
-offset_top = 570.0
-offset_right = 494.0
-offset_bottom = 695.0
+offset_top = -125.0
+offset_right = 493.0
 color = Color(0.0240611, 0.217654, 0.061116, 1)
 
 [node name="label_text" type="Label" parent="LeftTeam/Name2"]
-offset_left = 13.0
-offset_top = 8.0
-offset_right = 778.0
-offset_bottom = 121.0
+layout_mode = 0
+offset_left = 15.0
+offset_top = 5.0
+offset_right = 474.0
+offset_bottom = 118.0
 text = "Dan Švarc"
 label_settings = SubResource("LabelSettings_gyfs4")
 
 [node name="Name3" type="ColorRect" parent="LeftTeam"]
 layout_mode = 0
-offset_left = 2.0
-offset_top = 424.0
-offset_right = 593.0
-offset_bottom = 549.0
+offset_top = -260.0
+offset_right = 591.0
+offset_bottom = -135.0
 color = Color(0.0240611, 0.217654, 0.061116, 1)
 
 [node name="label_text" type="Label" parent="LeftTeam/Name3"]
+layout_mode = 0
 offset_left = 13.0
 offset_top = 8.0
 offset_right = 778.0
@@ -162,6 +159,7 @@ text = "Kuba Krejčí"
 label_settings = SubResource("LabelSettings_gyfs4")
 
 [node name="RightTeam" type="Control" parent="."]
+visible = false
 anchors_preset = 0
 offset_left = 3042.0
 offset_top = 1409.0
@@ -194,6 +192,7 @@ offset_bottom = 407.0
 color = Color(0.22, 0.0242, 0.0242, 1)
 
 [node name="label_text" type="Label" parent="RightTeam/Name1"]
+layout_mode = 0
 offset_left = 13.0
 offset_top = 8.0
 offset_right = 778.0
@@ -210,6 +209,7 @@ offset_bottom = 695.0
 color = Color(0.22, 0.0242, 0.0242, 1)
 
 [node name="label_text" type="Label" parent="RightTeam/Name2"]
+layout_mode = 0
 offset_left = 13.0
 offset_top = 8.0
 offset_right = 778.0
@@ -226,6 +226,7 @@ offset_bottom = 552.0
 color = Color(0.22, 0.0242, 0.0242, 1)
 
 [node name="label_text" type="Label" parent="RightTeam/Name3"]
+layout_mode = 0
 offset_left = 9.0
 offset_top = 8.0
 offset_right = 774.0
