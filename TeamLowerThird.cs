@@ -15,13 +15,30 @@ public partial class TeamLowerThird(string teamName, string[] teamMembers, Color
         FontSize = 150,
         Font = GD.Load<FontFile>("res://fonts/regular.ttf")
     };
+
+    private readonly Dictionary<ColorRect, float> _timings = [];
+    private ColorRect _mainBox = new();
+    private float _mainBoxTime;
+    private float _mainBoxTargetY;
     
     public override void _Ready() {
-        
+        Tween tw = GetTree().CreateTween().SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
+        (float x, float _) = _mainBox.Position;
+        tw.TweenProperty(this, "position", left ? new Vector2(80, 2060) : new Vector2(3760, 2060),.75f);
+        tw.TweenProperty(_mainBox, "position", new Vector2(x, _mainBoxTargetY), _mainBoxTime);
+        foreach ((ColorRect rect, float time) in _timings) {
+            tw.Parallel().TweenInterval(time).Finished += () => {
+                Tween tw2 = GetTree().CreateTween().SetParallel();
+                tw2.TweenProperty(rect, "modulate", new Color(1, 1, 1, 1), .3);
+            };
+        }
     }
 
     public override void _EnterTree() {
-        Position = left ? new Vector2(80, 2060) : new Vector2(3760, 2060);
+        
+        (float mfw, float mfh) = _teamLabelSettings.Font.GetStringSize(teamName,fontSize: _teamLabelSettings.FontSize);
+        
+        Position = left ? new Vector2(-mfw-200, 2060) : new Vector2(3760+mfw+200, 2060);
 
         List<string> sort = teamMembers.OrderBy(x => x.Length).ToList();
         
@@ -34,6 +51,7 @@ public partial class TeamLowerThird(string teamName, string[] teamMembers, Color
             rect.Size = new Vector2(fontwidth + 30, 125);
             rect.Position = new Vector2(left ? 0 : -rect.Size.X, -125 * (i + 1) - 10 * i);
             rect.Color = teamColorDarker;
+            rect.Modulate = new Color(0, 0, 0, 0);
             
             _children.Add(rect);
             AddChild(rect);
@@ -46,16 +64,22 @@ public partial class TeamLowerThird(string teamName, string[] teamMembers, Color
         
             _children.Add(label);
             rect.AddChild(label);
-        }
-        
-        (float mfw, float mfh) = _teamLabelSettings.Font.GetStringSize(teamName,fontSize: _teamLabelSettings.FontSize);
-        ColorRect mainRect = new();
-        mainRect.Size = new Vector2(mfw + 100, 250);
-        mainRect.Position = new Vector2(left? 0 : -mainRect.Size.X, -125 * sort.Count - 10 * (sort.Count -1) - 265);
-        mainRect.Color = teamColorBrighter;
+
+            float t = (float)Tween.InterpolateValue(0, 
+                sort.Count * .4f, 
+                i,
+                sort.Count, 
+                Tween.TransitionType.Linear,
+                Tween.EaseType.InOut);
             
-        _children.Add(mainRect);
-        AddChild(mainRect);
+            _timings[rect] = t-.1f;
+        }
+        _mainBox.Size = new Vector2(mfw + 100, 250);
+        _mainBox.Position = new Vector2(left? 0 : -_mainBox.Size.X,-250);
+        _mainBox.Color = teamColorBrighter;
+            
+        _children.Add(_mainBox);
+        AddChild(_mainBox);
             
         Label mainLabel = new();
         mainLabel.Text = teamName;
@@ -64,13 +88,33 @@ public partial class TeamLowerThird(string teamName, string[] teamMembers, Color
         mainLabel.Size = new Vector2(mfw, mfh);
         
         _children.Add(mainLabel);
-        mainRect.AddChild(mainLabel);
+        _mainBox.AddChild(mainLabel);
+        _mainBoxTime = sort.Count * .4f;
+        _mainBoxTargetY = -125 * sort.Count - 10 * (sort.Count - 1) - 265;
     }
 
     public void Remove() {
-        foreach (Control c in _children) {
-            c.QueueFree();
+        (float mfw, float mfh) = _teamLabelSettings.Font.GetStringSize(teamName,fontSize: _teamLabelSettings.FontSize);
+        
+        Tween tw = CreateTween().SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
+        (float x, float _) = _mainBox.Position;
+        tw.TweenProperty(_mainBox, "position", new Vector2(x, -250), _mainBoxTime).Finished += () => {
+            Tween tw2 = CreateTween().SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
+            tw2.TweenProperty(this, "position", left ? new Vector2(-mfw-200, 2060) : new Vector2(3760+mfw+200, 2060),.75f).Finished +=
+                () => {
+                    foreach (Control c in _children) {
+                        c.GetParent().RemoveChild(c);
+                        c.QueueFree();
+                    }
+                    GetParent().RemoveChild(this);
+                    QueueFree();
+                };
+        };
+        foreach ((ColorRect rect, float time) in _timings.Reverse()) {
+            tw.Parallel().TweenInterval(_mainBoxTime - time - .15).Finished += () => {
+                Tween tw2 = CreateTween().SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
+                tw2.TweenProperty(rect, "modulate", new Color(0, 0, 0, 0), .3);
+            };
         }
-        QueueFree();
     }
 }
