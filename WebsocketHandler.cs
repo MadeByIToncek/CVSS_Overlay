@@ -3,33 +3,60 @@ using Godot;
 
 namespace CVSS_Overlay;
 
-public partial class WebsocketHandler : Node2D {
-    private WebSocketPeer socket = new WebSocketPeer();
+public partial class WebsocketHandler(MainController main) : Node2D {
+    private readonly WebSocketPeer _eventSocket = new();
+    private readonly WebSocketPeer _timeSocket = new();
     
     public override void _Ready() {
-        Error e = socket.ConnectToUrl("ws://localhost:4444/socket");
-        if (e != Error.Ok) {
+        Error e1 = _eventSocket.ConnectToUrl(main._api.GetEventStreamAddress());
+        if (e1 != Error.Ok) {
             GD.PrintErr("Unable to connect!");
             Remove();
         }
-        else {
-            GetTree().CreateTimer(2).Timeout += () => {
-                socket.SendText("Test packet!");
-            };
+        
+        Error e2 = _timeSocket.ConnectToUrl(main._api.GetTimeStreamAddress());
+        if (e2 != Error.Ok) {
+            GD.PrintErr("Unable to connect!");
+            Remove();
         }
     }
 
     public override void _Process(double delta) {
-        socket.Poll();
-        switch (socket.GetReadyState()) {
+        ProcessEvents();
+        ProcessTime();
+    }
+
+    private void ProcessTime() {
+        _timeSocket.Poll();
+        switch (_timeSocket.GetReadyState()) {
             case WebSocketPeer.State.Open:
-                while (socket.GetAvailablePacketCount() > 0) {
-                    GD.Print($"Got data from server {socket.GetPacket().GetStringFromUtf8()}");
+                while (_timeSocket.GetAvailablePacketCount() > 0) {
+                    GD.Print($"Got data from server {_timeSocket.GetPacket().GetStringFromUtf8()}");
                 }
 
                 break;
             case WebSocketPeer.State.Closed:
-                GD.PrintErr($"WS closed! {socket.GetCloseCode()}, because {socket.GetCloseReason()}");
+                GD.PrintErr($"WS closed! {_timeSocket.GetCloseCode()}, because {_timeSocket.GetCloseReason()}");
+                Remove();
+                break;
+            case WebSocketPeer.State.Connecting:
+            case WebSocketPeer.State.Closing:
+            default:
+                break;
+        }
+    }
+
+    private void ProcessEvents() {
+        _eventSocket.Poll();
+        switch (_eventSocket.GetReadyState()) {
+            case WebSocketPeer.State.Open:
+                while (_eventSocket.GetAvailablePacketCount() > 0) {
+                    GD.Print($"Got data from server {_eventSocket.GetPacket().GetStringFromUtf8()}");
+                }
+
+                break;
+            case WebSocketPeer.State.Closed:
+                GD.PrintErr($"WS closed! {_eventSocket.GetCloseCode()}, because {_eventSocket.GetCloseReason()}");
                 Remove();
                 break;
             case WebSocketPeer.State.Connecting:
@@ -41,8 +68,8 @@ public partial class WebsocketHandler : Node2D {
 
     public void Remove() {
         SetProcess(false);
-        socket.Close();
-        socket.Dispose();
+        _eventSocket.Close();
+        _eventSocket.Dispose();
         GetParent().RemoveChild(this);
         QueueFree();
     }

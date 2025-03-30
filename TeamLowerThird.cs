@@ -4,7 +4,13 @@ using Godot;
 
 namespace CVSS_Overlay;
 
-public partial class TeamLowerThird(string teamName, string[] teamMembers, Color teamColorBrighter, Color teamColorDarker, bool left) : Control {
+public partial class TeamLowerThird(
+    string teamName,
+    string[] teamMembers,
+    Color teamColorBrighter,
+    Color teamColorDarker,
+    bool left,
+    MainController main) : Control {
     
     private readonly List<Control> _children = [];
     private LabelSettings _memberLabelSettings = new() {
