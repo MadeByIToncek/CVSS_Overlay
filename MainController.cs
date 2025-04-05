@@ -1,24 +1,40 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
 using Godot;
 
 namespace CVSS_Overlay;
 
-public partial class MainController : Control
-{
-    public ApiHandler _api;
-    public WebsocketHandler _wsh;
-    public MainController() {
-        _api = new ApiHandler(this);
-        _wsh = new WebsocketHandler(this);
-    }
-    
-    public override void _Ready() { 
-        AddChild(_api);
-        AddChild(_wsh);
+public partial class MainController : Control {
+    public ApiHandler Api;
+    public WebsocketHandler Wsh;
+    public TimerController? Timer;
+    public TeamLowerThird? LeftThird;
+    public TeamLowerThird? RightThird;
+    public CurrentMatch? Match;
 
-        GetTree().CreateTimer(6).Timeout += () => {
-            _wsh.Remove();
-            _api.Remove();
-            GetTree().Quit();
-        };
+    public MainController() {
+        Api = new ApiHandler(this);
+        Wsh = new WebsocketHandler(this);
+    }
+
+    public override void _Ready() {
+        AddChild(Api);
+        AddChild(Wsh);
+
+        // GetTree().CreateTimer(6).Timeout += () => {
+        //     Wsh.Remove();
+        //     Api.Remove();
+        //     GetTree().Quit();
+        // };
+    }
+
+
+    public void SetCurrentTime(int i) {
+        if (Timer == null) {
+           return; 
+        }
+
+        Timer.SetCurrentTime(i);
     }
 }

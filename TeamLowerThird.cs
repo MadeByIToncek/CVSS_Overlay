@@ -112,7 +112,7 @@ public partial class TeamLowerThird(
                         c.GetParent().RemoveChild(c);
                         c.QueueFree();
                     }
-                    GetParent().RemoveChild(this);
+                    //GetParent().RemoveChild(this);
                     QueueFree();
                 };
         };

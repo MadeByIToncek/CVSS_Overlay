@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -73,7 +74,7 @@ public partial class TimerController (Color team1, Color team2, MainController m
         _timerBackground = new();
         _timerBackground.Position = new Vector2(0, 0);
         _timerBackground.Size = new Vector2(400, 133);
-        _timerBackground.Color = new Color("#383838");
+        _timerBackground.Color = new Color("#101010");
         
         _children.Add(_timerBackground);
         AddChild(_timerBackground);
@@ -102,5 +103,10 @@ public partial class TimerController (Color team1, Color team2, MainController m
             }
             QueueFree();
         };
+    }
+
+    public void SetCurrentTime(int i) {
+        TimeSpan rem = TimeSpan.FromSeconds(i);
+        _timerLabel.SetText($"{rem.Minutes:00}:{rem.Seconds:00}");
     }
 }
