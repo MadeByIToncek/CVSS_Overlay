@@ -9,8 +9,7 @@ public partial class TeamLowerThird(
     string[] teamMembers,
     Color teamColorBrighter,
     Color teamColorDarker,
-    bool left,
-    MainController main) : Control {
+    bool left) : Control {
     
     private readonly List<Control> _children = [];
     private LabelSettings _memberLabelSettings = new() {
@@ -35,7 +34,7 @@ public partial class TeamLowerThird(
         foreach ((ColorRect rect, float time) in _timings) {
             tw.Parallel().TweenInterval(time).Finished += () => {
                 Tween tw2 = GetTree().CreateTween().SetParallel();
-                tw2.TweenProperty(rect, "modulate", new Color(1, 1, 1, 1), .3);
+                tw2.TweenProperty(rect, "modulate", new Color(1, 1, 1), .3);
             };
         }
     }
@@ -100,7 +99,7 @@ public partial class TeamLowerThird(
     }
 
     public void Remove() {
-        (float mfw, float mfh) = _teamLabelSettings.Font.GetStringSize(teamName,fontSize: _teamLabelSettings.FontSize);
+        (float mfw, float _) = _teamLabelSettings.Font.GetStringSize(teamName,fontSize: _teamLabelSettings.FontSize);
         
         Tween tw = CreateTween().SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
         (float x, float _) = _mainBox.Position;

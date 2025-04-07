@@ -4,7 +4,7 @@ using Godot;
 
 namespace CVSS_Overlay;
 
-public partial class TimerController (Color team1, Color team2, MainController main) : Control {
+public partial class TimerController (Color team1, Color team2) : Control {
     private ColorRect _timerBackground;
     private Label _timerLabel;
     private ColorRect _t1Box;
