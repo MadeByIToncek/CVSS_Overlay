@@ -8,14 +8,44 @@ namespace CVSS_Overlay;
 
 public partial class MainController : Control {
     private ApiHandler _api;
-    private WebsocketHandlerImpl _wsh;
+    private WebsocketHandler _wsh;
     private TimerController? _timer;
     private TeamLowerThird? _leftThird;
     private TeamLowerThird? _rightThird;
 
     public MainController() {
         _api = new ApiHandler();
-        _wsh = new WebsocketHandlerImpl(_api, this);
+        _wsh = new WebsocketHandler(_api);
+
+        _wsh.CommandReceived += (sender, cmd) => {
+            switch (cmd) {
+                case OverlayCommand.SHOW_RIGHT:
+                    ShowRight();
+                    break;
+                case OverlayCommand.HIDE_RIGHT:
+                    HideRight();
+                    break;
+                case OverlayCommand.SHOW_LEFT:
+                    ShowLeft();
+                    break;
+                case OverlayCommand.HIDE_LEFT:
+                    HideLeft();
+                    break;
+                case OverlayCommand.SHOW_TIME:
+                    ShowTime();
+                    break;
+                case OverlayCommand.HIDE_TIME:
+                    HideTime();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(cmd), cmd, null);
+            }
+        };
+        _wsh.TimeReceived += (sender, time) => {
+            if (time >= 0) {
+                SetCurrentTime(time);
+            }
+        };
     }
 
     public override void _EnterTree() {
@@ -85,37 +115,5 @@ public partial class MainController : Control {
 
     private void SetCurrentTime(int i) {
         _timer?.SetCurrentTime(i);
-    }
-
-    private partial class WebsocketHandlerImpl(ApiHandler api, MainController controller) : WebsocketHandler(api) {
-        protected override void ReceivedCommand(OverlayCommand cmd) {
-            switch (cmd) {
-                case OverlayCommand.SHOW_RIGHT:
-                    controller.ShowRight();
-                    break;
-                case OverlayCommand.HIDE_RIGHT:
-                    controller.HideRight();
-                    break;
-                case OverlayCommand.SHOW_LEFT:
-                    controller.ShowLeft();
-                    break;
-                case OverlayCommand.HIDE_LEFT:
-                    controller.HideLeft();
-                    break;
-                case OverlayCommand.SHOW_TIME:
-                    controller.ShowTime();
-                    break;
-                case OverlayCommand.HIDE_TIME:
-                    controller.HideTime();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(cmd), cmd, null);
-            }
-        }
-        protected override void ReceivedTime(int time) {
-            if (time >= 0) {
-                controller.SetCurrentTime(time);
-            } 
-        }
     }
 }
